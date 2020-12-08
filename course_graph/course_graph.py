@@ -13,14 +13,14 @@ class Course_Graph():
     def get_by_name(self, name):
         return self._graph[name]
 
-    def get_prerequisites(self, course_name:str):
+    def get_prerequisites(self, course_name:str, prerequisites=None):
+        if not prerequisites:
+            prerequisites = list()
         temp_course = self.get_by_name(name=course_name)
-        prerequisites = list()
         for course in temp_course.prerequisites:
-            prerequisites.append(course)
-            temp_prerequisites = self.get_prerequisites(course)
-            for temp_prerequisite in temp_prerequisites:
-                prerequisites.append(temp_prerequisite)
+            if course not in prerequisites:
+                prerequisites.append(course)
+                prerequisites = self.get_prerequisites(course, prerequisites=prerequisites)
         return prerequisites
 
     def get_num_prerequisites(self, course_name:str):
